@@ -79,6 +79,35 @@ closedEdges = cv2.morphologyEx(imageEdges, cv2.MORPH_CLOSE, np.ones((5, 11)))
 implt(closedEdges, 'gray', 'Edges')
 
 
+def harris(img,window_size,alpha,threshold):
+    """
+    Score R:= product(eigenvalues) - alpha*(sum(eigenvalues))
+    """
+    start = time.process_time()
+    print("Harris Corner Detection")
+    coordinate_y = []
+    coordinate_x = []
+    strided = windows_strided(img,window_size)
+    k = window_size//2
+    l = window_size//2
+    c = 0
+    for stride in strided:
+        for i in stride:
+            temp = eigenvals(i)
+            R = np.subtract(np.prod(temp),np.multiply(alpha,np.sum(temp)))
+            # if R>0:
+            #     print(R)
+            if R > threshold:
+                c+=1
+                coordinate_x.append(k)
+                coordinate_y.append(l)
+            k+=1
+        l+=1
+        k=window_size//2
+    print("Corners Detected:{}".format(c))
+    print("Total time: {}s".format(time.process_time()- start))
+    return [coordinate_x,coordinate_y]
+
 def perspImageTransform(img, sPoints):
     height = max(np.linalg.norm(sPoints[0] - sPoints[1]),
                  np.linalg.norm(sPoints[2] - sPoints[3]))
