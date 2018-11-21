@@ -43,6 +43,60 @@ def contourOffset(cnt, offset):
     return cnt
 
 
+def findPageContours(edges, img):
+    im2, contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    
+    height = edges.shape[0]
+    width = edges.shape[1]
+    MIN_COUNTOUR_AREA = height * width * 0.5
+    MAX_COUNTOUR_AREA = (width - 10) * (height - 10)
 
+    maxArea = MIN_COUNTOUR_AREA
+    pageContour = np.array([[0, 0],
+                            [0, height-5],
+                            [width-5, height-5],
+                            [width-5, 0]])
+
+    for cnt in contours:
+        perimeter = cv2.arcLength(cnt, True)
+        approx = cv2.approxPolyDP(cnt, 0.03 * perimeter, True)
+
+        if (len(approx) == 4 and
+                cv2.isContourConvex(approx) and
+                maxArea < cv2.contourArea(approx) < MAX_COUNTOUR_AREA):
+            
+            maxArea = cv2.contourArea(approx)
+            pageContour = approx[:, 0]
+
+    pageContour = fourCornersSort(pageContour)
+    return contourOffset(pageContour, (-5, -5))
+    
+pageContour = findPageContours(closedEdges, resize(image))
+print("PAGE CONTOUR:")
+print(pageContour)
+implt(cv2.drawContours(resize(image), [pageContour], -1, (0, 255, 0), 3))
+
+pageContour = pageContour.dot(ratio(image))
+
+def perspImageTransform(img, sPoints):
+    height = max(np.linalg.norm(sPoints[0] - sPoints[1]),
+                 np.linalg.norm(sPoints[2] - sPoints[3]))
+    width = max(np.linalg.norm(sPoints[1] - sPoints[2]),
+                 np.linalg.norm(sPoints[3] - sPoints[0]))
+    
+    tPoints = np.array([[0, 0],
+                        [0, height],
+                        [width, height],
+                        [width, 0]], np.float32)
+    
+    if sPoints.dtype != np.float32:
+        sPoints = sPoints.astype(np.float32)
+    
+    M = cv2.getPerspectiveTransform(sPoints, tPoints) 
+    return cv2.warpPerspective(img, M, (int(width), int(height)))
+    
+    
+newImage = perspImageTransform(image, pageContour)
+implt(newImage, t='Result')
 
 cv2.imwrite(IMG, cv2.cvtColor(newImage, cv2.COLOR_BGR2RGB))
