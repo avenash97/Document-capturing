@@ -14,7 +14,10 @@ Dataset comprises of document's captured images with noise.
 ```
 ### Execute training python code as 
   ```
-   $ python dog.py
+   $ jupyter notebook detect.ipynb  ```
+or
+  ```
+   $ python detect.py
   ```
 ### Sample Input and Output 
 ![alt text](https://github.com/avenash97/Document-capturing/blob/master/github.png)
