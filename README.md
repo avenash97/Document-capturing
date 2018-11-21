@@ -12,7 +12,7 @@ Dataset comprises of document's captured images with noise.
 4. CV2
 5. matplotlib
 ```
-### Execute training python code as 
+### Execute python code as 
   ```
    $ jupyter notebook detect.ipynb  
   ```
