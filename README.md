@@ -1,2 +1,22 @@
 # Document-capturing
-Efficient detection and segmentation of document regions
+Efficient detection and segmentation of document regions.
+
+### Dataset description
+Dataset comprises of document's captured images with noise. 
+
+### Packages Required
+```
+1. sklearn
+2. numpy
+3. pandas
+4. CV2
+5. matplotlib
+```
+### Execute training python code as 
+  ```
+   $ python dog.py
+  ```
+  
+
+
+
