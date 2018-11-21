@@ -14,8 +14,9 @@ Dataset comprises of document's captured images with noise.
 ```
 ### Execute training python code as 
   ```
-   $ jupyter notebook detect.ipynb  ```
-or
+   $ jupyter notebook detect.ipynb  
+  ```
+  or
   ```
    $ python detect.py
   ```
