@@ -16,7 +16,7 @@ Dataset comprises of document's captured images with noise.
   ```
    $ python dog.py
   ```
-  
-
+### Sample Input and Output 
+![alt text](https://github.com/avenash97/Document-capturing/blob/master/github.png)
 
 
